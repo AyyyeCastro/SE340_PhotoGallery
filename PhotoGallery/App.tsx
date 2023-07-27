@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import { ContactList } from './ContactList';
-
+// import { ContactList } from './ContactList';  -- Not needed for this project. But, would like to keep for future referencing.
+import GalleryView from './GalleryView';
 
 
 export default function App() {
@@ -9,8 +9,9 @@ export default function App() {
     <View style={styles.container}>
       <StatusBar style="auto" />
 
-      <ContactList/>
+     {/* <ContactList/>  -- Not needed for this project. But, would like to keep for future referencing.*/}
       
+     <GalleryView />
     </View>
     
   );
