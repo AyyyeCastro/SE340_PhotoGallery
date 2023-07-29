@@ -8,14 +8,14 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import { BlurView } from "expo-blur";
+// import { BlurView } from "expo-blur"; background should be completely solid for assignment.
 import closeIcon from "./assets/closeIcon.png";
 
 // ----- Stylesheet ---- //
 
 /* 
   Andrew's future self note:
-  For this project I am utilizing a blur package that can apply over componenets via Expo CLI. 
+  For this project I -- WAS -- utilizing a blur package that can apply over componenets via Expo CLI. 
   > npx expo install expo-blur
   > import { BlurView } from 'expo-blur';
 */
@@ -47,9 +47,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   /* Important: read top of the project's notes regarding Expo Blur */
-  blurContainer: {
+  fullViewImage: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(000, 000, 000, 0.4)", // opacity is important for blur perception
+    backgroundColor: "black", // opacity is important for blur perception
     justifyContent: 'center',
     alignItems: "center",
   },
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   closeIcon: {
     width: 30,
     height: 30,
-    tintColor: "white", // Adjust the color of the X mark icon as needed
+    tintColor: "gray", // Adjust the color of the X mark icon as needed
   },
 
   // SearchBar
@@ -152,12 +152,11 @@ const GalleryView = () => {
       {/* When image tapped -> fullscreen it */}
       {selectedImage !== "" && (
         <TouchableOpacity
-          style={styles.blurContainer}
+          style={styles.fullViewImage}
           onPress={HandleOnPressFullscreen}
           activeOpacity={1}
         >
           {/* Use the Expo BlurView for the semi-transparent background with blur effect */}
-          <BlurView intensity={10} style={styles.blurContainer}>
             <Image
               source={{ uri: selectedImage }}
               style={styles.fullImage}
@@ -170,7 +169,6 @@ const GalleryView = () => {
             >
               <Image source={closeIcon} style={styles.closeIcon} />
             </TouchableOpacity>
-          </BlurView>
         </TouchableOpacity>
       )}
     </View>
