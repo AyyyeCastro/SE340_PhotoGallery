@@ -1,7 +1,15 @@
 // ----- Imports ---- //
-import React, { useState } from 'react';
-import { View, Image, FlatList, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
-import { BlurView } from 'expo-blur';
+import React, { useState } from "react";
+import {
+  View,
+  Image,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
+import { BlurView } from "expo-blur";
+import closeIcon from "./assets/closeIcon.png";
 
 // ----- Stylesheet ---- //
 
@@ -15,49 +23,61 @@ import { BlurView } from 'expo-blur';
 const styles = StyleSheet.create({
   /* Some sourced from: https://reactnative.dev/docs/flexbox */
   container: {
+    width: "100%", // important to hardset this width, as searched images could (will) have 1 photo in a row.
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#F5F5F5",
     paddingTop: 20,
     padding: 15,
   },
   gridContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
   },
   gridItem: {
-    width: '32%', // 3 photos in a row with some spacing in between
+    width: "32%", // 3 photos in a row
     aspectRatio: 1, // Ensure images maintain their aspect ratio
     marginBottom: 5, // Spacing between rows
-    marginLeft: 5,
+    marginLeft: 5, // spacing between columns
   },
   image: {
+    borderColor: "gray", // apply a minimal gray border along each photo in gridView.
+    borderWidth: 0.5,
     flex: 1,
     borderRadius: 10,
   },
-
-  /* Important: read above notes regarding Blurring */
+  /* Important: read top of the project's notes regarding Expo Blur */
   blurContainer: {
     ...StyleSheet.absoluteFillObject,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'black',
+    backgroundColor: "rgba(000, 000, 000, 0.4)", // opacity is important for blur perception
+    alignItems: "center",
   },
   fullImage: {
-    width: '90%',
+    width: "90%", // 90% width provides a more relaxed fullscreen view.
     aspectRatio: 1,
   },
+  closeIconContainer: {
+    position: "absolute",
+    top: 285, // Adjust the top position as needed
+    right: 30, // Adjust the right position as needed
+  },
+  closeIcon: {
+    width: 30,
+    height: 30,
+    tintColor: "white", // Adjust the color of the X mark icon as needed
+  },
+
+  // SearchBar
   textInput: {
-    textAlign: 'center',
-    height: '4%',
-    borderColor: 'gray',
+    textAlign: "center",
+    borderColor: "gray",
     borderWidth: 1,
     borderRadius: 10,
     paddingHorizontal: 10,
     marginVertical: 50,
   },
 });
-
+/////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Define ImageData interface code from Canvas WK2: Photo Gallery Assignment
 interface ImageData {
@@ -67,15 +87,13 @@ interface ImageData {
 
 // Loop provided from Canvas WK2: Photo Gallery HW Assignment
 const imageData: ImageData[] = [];
-for (let i = 151; i < 250; i++) {
+for (let i = 503; i < 750; i++) {
   imageData.push({ id: i, url: `https://picsum.photos/id/${i}/200` });
 }
 
-
 const GalleryView = () => {
-
-  // default image should be empty. 
-  const [selectedImage, setSelectedImage] = useState<string>('');
+  // default image should be empty.
+  const [selectedImage, setSelectedImage] = useState<string>("");
 
   // when clicking an image, set the Selected image to the url of the image selected.
   const HandleOnPressGrid = (image: ImageData) => {
@@ -86,32 +104,34 @@ const GalleryView = () => {
      Set it back to an empty string when tapped again, to go back to grid view 
   */
   const HandleOnPressFullscreen = () => {
-    setSelectedImage('');
+    setSelectedImage("");
   };
 
   // default state should be an empty string
-  const [searchQuery, setSearchQuery] = useState('');
-
+  const [searchQuery, setSearchQuery] = useState("");
 
   const renderGridItem = ({ item }: { item: ImageData }) => {
     return (
       <TouchableOpacity
-        style={styles.gridItem}
+        style={[styles.gridItem]}
         onPress={() => HandleOnPressGrid(item)}
         activeOpacity={0.7}
       >
-        <Image source={{ uri: item.url }} style={styles.image} resizeMode="cover" />
+        <Image
+          source={{ uri: item.url }}
+          style={styles.image}
+          resizeMode="cover"
+        />
       </TouchableOpacity>
     );
   };
 
-  //Note: overall logic trys to follow the ContactList component. 
+  //Note: overall logic trys to follow the ContactList component.
   const filteredImage = imageData.filter((image) =>
     image.id.toString().includes(searchQuery)
   );
 
   return (
-    
     <View style={styles.container}>
       {/* Search input */}
       <TextInput
@@ -129,19 +149,26 @@ const GalleryView = () => {
       />
 
       {/* When image tapped -> fullscreen it */}
-      {selectedImage !== '' && (
+      {selectedImage !== "" && (
         <TouchableOpacity
           style={styles.blurContainer}
           onPress={HandleOnPressFullscreen}
           activeOpacity={1}
         >
           {/* Use the Expo BlurView for the semi-transparent background with blur effect */}
-          <BlurView intensity={100} style={styles.blurContainer}>
+          <BlurView intensity={10} style={styles.blurContainer}>
             <Image
               source={{ uri: selectedImage }}
               style={styles.fullImage}
               resizeMode="contain"
             />
+            {/* X mark icon */}
+            <TouchableOpacity
+              style={styles.closeIconContainer}
+              onPress={HandleOnPressFullscreen}
+            >
+              <Image source={closeIcon} style={styles.closeIcon} />
+            </TouchableOpacity>
           </BlurView>
         </TouchableOpacity>
       )}
