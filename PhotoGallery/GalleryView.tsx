@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
   blurContainer: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "rgba(000, 000, 000, 0.4)", // opacity is important for blur perception
+    justifyContent: 'center',
     alignItems: "center",
   },
   fullImage: {
